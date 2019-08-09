@@ -1,0 +1,34 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+      http://www.springframework.org/schema/jdbc
+      http://www.springframework.org/schema/jdbc/spring-jdbc-4.2.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context-4.2.xsd
+      http://www.springframework.org/schema/security
+      http://www.springframework.org/schema/security/spring-security-4.2.xsd">
+
+
+    <bean id="beanObjectStore" class="com.alexfrndz.CustomMonitoredObjectStore" >
+       <property name="cache" ref="cache"/>
+    </bean>
+	
+	<bean id="cacheManager" name="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
+
+<bean id="cache" name="cache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+    <property name="cacheManager" ref="cacheManager"/>
+    <property name="cacheName" value="dbCache"/>
+    <property name="maxElementsInMemory" value="10000"/>
+    <property name="eternal" value="false"/>
+    <property name="timeToIdle" value="120"/>
+    <property name="timeToLive" value="120"/>
+    <property name="overflowToDisk" value="true"/>
+    <property name="maxElementsOnDisk" value="10000000"/>
+    <property name="diskPersistent" value="true"/>
+    <property name="diskExpiryThreadIntervalSeconds" value="120"/>
+    <property name="memoryStoreEvictionPolicy" value="LRU"/>
+</bean>
+</beans>

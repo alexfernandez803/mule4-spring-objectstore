@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:spring="http://www.mulesoft.org/schema/mule/spring" xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" 
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/spring http://www.mulesoft.org/schema/mule/spring/current/mule-spring.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+  
+  <spring:config name="datasource_config" files="cache-spring-beans.xml" />
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="1ce989ab-ebf5-4922-9207-d49fb8c207e5" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+
+	<ee:object-store-caching-strategy name="Caching_Strategy" doc:name="Caching Strategy" doc:id="8abdb644-0861-4a79-81ae-41db40bd2536"  objectStore="beanObjectStore"/>
+	<flow name="example-object-storeFlow1" doc:id="a867215b-db12-4f23-bc0a-904ebd2fef2d" >
+		<http:listener doc:name="Listener" doc:id="1688b419-52c3-4046-ab61-6e329b2bbf3e" config-ref="HTTP_Listener_config" path="test"/>
+		<ee:cache doc:name="Cache" doc:id="9fbeff73-b921-49d5-a689-80612eb619b1" cachingStrategy-ref="Caching_Strategy">
+			<ee:transform doc:name="Transform Message" doc:id="3c29bb8f-3a4e-488c-b3a6-4ea33cd9df01" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			
+		</ee:cache>
+		<logger level="INFO" doc:name="Logger" doc:id="e8ce66b6-bff4-44d2-be9a-597ba6b91a08" />
+	</flow>
+</mule>
